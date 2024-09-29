@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Create heart rate chart
             createHeartRateChart('heartRateChart', data.heartRate, data.sleepPeriod);
 
+            // Display sleep JSON data
+            displaySleepJson(data.sleep);
+
         } catch (error) {
             console.error('Error:', error);
             dateMessageElement.textContent = `Error: ${error.message}`;
@@ -65,24 +68,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displaySleepPeriod(sleepPeriod) {
+        console.log('Sleep period data:', sleepPeriod);
         if (sleepPeriod && sleepPeriod.bedtime_start && sleepPeriod.bedtime_end) {
             const startTime = moment(sleepPeriod.bedtime_start).format('HH:mm');
             const endTime = moment(sleepPeriod.bedtime_end).format('HH:mm');
+            console.log(`Formatted sleep period: ${startTime} - ${endTime}`);
             sleepPeriodElement.textContent = `Sleep Period: ${startTime} - ${endTime}`;
         } else {
+            console.log('Sleep period data is incomplete or missing');
             sleepPeriodElement.textContent = 'Sleep Period: N/A';
         }
     }
 
     function createHeartRateChart(elementId, heartRateData, sleepPeriod) {
         console.log('Creating heart rate chart');
-        const ctx = document.getElementById(elementId).getContext('2d');
+        const canvas = document.getElementById(elementId);
 
-        // Destroy existing chart if it exists
-        if (currentHRChart) {
-            currentHRChart.destroy();
-            currentHRChart = null;  // Set to null after destroying
-        }
+        // Remove the existing canvas and create a new one
+        const parent = canvas.parentNode;
+        parent.removeChild(canvas);
+        const newCanvas = document.createElement('canvas');
+        newCanvas.id = elementId;
+        parent.appendChild(newCanvas);
+
+        const ctx = newCanvas.getContext('2d');
 
         // Prepare data for the chart
         const data = heartRateData.map(d => ({
@@ -126,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Create new chart
-        currentHRChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'line',
             data: {
                 datasets: datasets
@@ -159,5 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         console.log('Heart rate chart created');
+    }
+
+    function displaySleepJson(sleepData) {
+        const sleepJsonElement = document.getElementById('sleep-json');
+        sleepJsonElement.textContent = JSON.stringify(sleepData, null, 2);
     }
 });

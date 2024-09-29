@@ -2,6 +2,7 @@ from fasthtml.common import JSON
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
+from flask import request
 
 # import the server app
 from main import app

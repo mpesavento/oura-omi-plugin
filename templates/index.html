@@ -65,6 +65,15 @@
             font-style: italic;
             display: none; /* Initially hidden */
         }
+        #sleep-json {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 
 </head>
@@ -89,6 +98,10 @@
         <div class="data-item">
             <h2>Activity Score</h2>
             <p id="activity-score"></p>
+        </div>
+        <div class="data-item">
+            <h2>Sleep Data</h2>
+            <pre id="sleep-json"></pre>
         </div>
     </div>
     <div class="chart-container">
