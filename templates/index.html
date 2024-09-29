@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oura Ring Daily Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js"></script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}" defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="date"], button {
+            padding: 8px;
+            margin-right: 10px;
+        }
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .data-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .data-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            flex: 1 1 200px;
+        }
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .date-message {
+            background-color: #e9ecef;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-style: italic;
+            display: none; /* Initially hidden */
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Oura Ring Daily Dashboard</h1>
+    <form id="dateForm">
+        <label for="selected_date">Select Date:</label>
+        <input type="date" id="selected_date" name="selected_date" required value="{{ current_date }}">
+        <button type="submit">Get Data</button>
+    </form>
+    <div id="date-message" class="date-message"></div>
+    <div class="data-container">
+        <div class="data-item">
+            <h2>Readiness Score</h2>
+            <p id="readiness-score"></p>
+        </div>
+        <div class="data-item">
+            <h2>Sleep Score</h2>
+            <p id="sleep-score"></p>
+            <p id="sleep-period"></p>
+        </div>
+        <div class="data-item">
+            <h2>Activity Score</h2>
+            <p id="activity-score"></p>
+        </div>
+    </div>
+    <div class="chart-container">
+        <canvas id="heartRateChart"></canvas>
+    </div>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

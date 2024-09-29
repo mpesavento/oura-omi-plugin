@@ -1,0 +1,15 @@
+<<<<<<< Updated upstream
+=======
+requests
+python-dotenv
+openai
+pydantic
+flask
+gunicorn
+
+# python-fasthtml
+# starlette>=0.39.0  # req for python-fasthtml
+
+# ipython
+# ipykernel
+>>>>>>> Stashed changes
