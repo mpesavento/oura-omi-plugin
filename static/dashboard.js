@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(form);
         const selectedDate = formData.get('selected_date');
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         // Display that the query was submitted
         dateMessageElement.textContent = `Fetching data for ${selectedDate}...`;
@@ -31,7 +32,13 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch('/api/get_oura_data', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-User-Timezone': userTimezone
+                },
+                body: new URLSearchParams({
+                    'selected_date': selectedDate
+                })
             });
 
             if (!response.ok) {
@@ -53,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             createHeartRateChart('heartRateChart', data.heartRate, data.sleepPeriod);
 
             // Display sleep JSON data
-            displaySleepJson(data.sleep);
+            displaySleepJson(data.sleepPeriods);
 
         } catch (error) {
             console.error('Error:', error);
@@ -70,10 +77,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function displaySleepPeriod(sleepPeriod) {
         console.log('Sleep period data:', sleepPeriod);
         if (sleepPeriod && sleepPeriod.bedtime_start && sleepPeriod.bedtime_end) {
-            const startTime = moment(sleepPeriod.bedtime_start).format('HH:mm');
-            const endTime = moment(sleepPeriod.bedtime_end).format('HH:mm');
-            console.log(`Formatted sleep period: ${startTime} - ${endTime}`);
-            sleepPeriodElement.textContent = `Sleep Period: ${startTime} - ${endTime}`;
+            const startMoment = moment(sleepPeriod.bedtime_start);
+            const endMoment = moment(sleepPeriod.bedtime_end);
+            const startTime = startMoment.format('HH:mm');
+            const endTime = endMoment.format('HH:mm');
+            const timeZoneOffset = startMoment.format('Z');
+            const timeZoneFormatted = timeZoneOffset.replace(':', '');
+            console.log(`Formatted sleep period: ${startTime} - ${endTime} ${timeZoneFormatted}`);
+            sleepPeriodElement.textContent = `Sleep Period: ${startTime} - ${endTime} (UTC${timeZoneFormatted})`;
         } else {
             console.log('Sleep period data is incomplete or missing');
             sleepPeriodElement.textContent = 'Sleep Period: N/A';

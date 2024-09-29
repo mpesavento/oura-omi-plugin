@@ -1,9 +1,8 @@
-<<<<<<< Updated upstream
-=======
 requests
 python-dotenv
 openai
 pydantic
+pytz
 flask
 gunicorn
 
@@ -12,4 +11,3 @@ gunicorn
 
 # ipython
 # ipykernel
->>>>>>> Stashed changes
